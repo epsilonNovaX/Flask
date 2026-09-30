@@ -19,7 +19,6 @@ This will install the packages from requirements.txt for this project.
 app = Flask(__name__)
 
 app.secret_key="some key"
-
 class LoginForm(FlaskForm):
     email=StringField("email",render_kw={"size":30},validators=[DataRequired(),Email()])
     password=PasswordField("password",render_kw={"size":30},validators=[DataRequired(),length(min=8)])
@@ -28,9 +27,13 @@ class LoginForm(FlaskForm):
 def login():
     form=LoginForm()
     if form.validate_on_submit():
-        return "<h1>Login Successful</h1>"
+        if(form.password.data=="12345678" and form.email.data=="admin@email.com"):
+            
+            return render_template("success.html")
+        else:
+            return render_template("denied.html")
     return render_template('login.html',form=form)
-
+ 
 @app.route("/")
 def home():
     return render_template("index.html")
